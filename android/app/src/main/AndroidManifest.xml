@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.CAMERA"></uses-permission>
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="thongkehanghoa"
+        android:label="Thống kê hàng hóa"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

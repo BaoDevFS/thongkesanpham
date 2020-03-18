@@ -72,6 +72,26 @@ class _MyHomePageState extends State<MyHomePage> {
                   ));
                 },
               ),
+              ListTile(
+                title: Row(
+                  children: <Widget>[
+                    Icon(
+                      Icons.monetization_on,
+                      textDirection: TextDirection.rtl,
+                    ),
+                    SizedBox(
+                      width: 30,
+                    ),
+                    Text('Đếm tiền')
+                  ],
+                ),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) => CountMoney(),
+                  ));
+                },
+              ),
             ],
           ),
         ),
@@ -95,7 +115,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child:
           Scaffold(
             appBar: AppBar(
-              title: Text("Sáng"),
+              title: Text("Ca sáng"),
               actions: <Widget>[
                 IconButton(icon: Icon(Icons.add_box),
                 onPressed: (){
@@ -138,7 +158,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         SizedBox(
                           width: 30,
                         ),
-                        Text('Sáng')
+                        Text('Ca sáng')
                       ],
                     ),
                     onTap: () {
@@ -155,7 +175,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         SizedBox(
                           width: 30,
                         ),
-                        Text('Chiều')
+                        Text('Ca Chiều')
                       ],
                     ),
                     onTap: () {

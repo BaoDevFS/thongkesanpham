@@ -28,7 +28,7 @@ class AfternoonSessionState extends State<AfternoonSession> {
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Chiều"),
+          title: Text("Ca chiều"),
           actions: <Widget>[
             IconButton(icon: Icon(Icons.add_box),
               onPressed: (){

@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_money_formatter/flutter_money_formatter.dart';
 import 'package:thongkehanghoa/control/controlTotalDay.dart';
 
 class TotalDay extends StatefulWidget{
@@ -46,7 +47,7 @@ class _TotalDayState extends State<TotalDay> {
                     switch(snapshot.connectionState){
                       case ConnectionState.done:
                         if(snapshot.hasData){
-                          _edit.text="${widget.controlTotalDay.total}";
+                          _edit.text="${FlutterMoneyFormatter(amount: widget.controlTotalDay.total).output.withoutFractionDigits }";
                           var maps = snapshot.data;
                           return ListView.builder(
                               itemCount: maps.length,
@@ -75,7 +76,7 @@ class _TotalDayState extends State<TotalDay> {
                 children: <Widget>[
                 TextField(
                   controller: _edit,
-                  readOnly: true,
+                  readOnly: true,style: TextStyle(fontSize: 20,color: Colors.red),
                   decoration: InputDecoration(
                     labelText:"Tổng tiền thu",
                     contentPadding: EdgeInsets.all(10),

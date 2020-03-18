@@ -9,7 +9,6 @@ class DaoProductDefault {
 
   Future<Database> createDatabase() async {
     if (database != null) {
-      print("return has P");
       return database;
     }
     var databasesPath = await getDatabasesPath();
@@ -17,7 +16,6 @@ class DaoProductDefault {
 
     database =
         await openDatabase(path, version: 1, onCreate: (db, version) async {});
-    print("create new database P");
     return database;
   }
 

@@ -14,13 +14,7 @@ class InputProduct extends StatefulWidget {
   InputProduct(
     this.controlSaleMorning,
     this.type,
-  ) {
-    if (type == 1) {
-      print("new InputMorning");
-    } else {
-      print("new InputAfternoon");
-    }
-  }
+  );
 
   @override
   State createState() {
@@ -54,7 +48,6 @@ class _InputProductState extends State<InputProduct>
     await closeedit();
     WidgetsBinding.instance.removeObserver(this);
     bloc.dispose();
-    print("inputdispose");
   }
 
   @override
@@ -144,14 +137,19 @@ class _InputProductState extends State<InputProduct>
                   AsyncSnapshot<List<SaleProduct>> snapshot) {
                 if (snapshot.hasData) {
                   List<SaleProduct> list = snapshot.data;
-                  textControlers.clear();
                   return ListView.builder(
                       itemCount: list.length,
                       itemBuilder: (context, i) {
                         var saleproduct = list.elementAt(i);
                         if (i >= textControlers.length) {
                           textControlers.add(new TextEditingController(
+                              text: saleproduct.amountInput.toString(),));
+                          textControlers.elementAt(i).selection =TextSelection.collapsed(offset: saleproduct.amountInput.toString().length);
+                        }else{
+                          textControlers.removeAt(i);
+                          textControlers.insert(i, new TextEditingController(
                               text: saleproduct.amountInput.toString()));
+                          textControlers.elementAt(i).selection =TextSelection.collapsed(offset: saleproduct.amountInput.toString().length);
                         }
                         // type 1  chage input
                         return _rowInListView(1, saleproduct, context, i);

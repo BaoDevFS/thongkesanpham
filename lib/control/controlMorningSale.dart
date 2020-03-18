@@ -9,9 +9,6 @@ import 'package:thongkehanghoa/model/product.dart';
 import 'package:thongkehanghoa/model/saleProduct.dart';
 
 class ControlSaleMorning {
-  ControlSaleMorning() {
-    print("new ControlSaleMorning");
-  }
 
   DaoProductDefault daoProductDefault;
   DaoSaleProductSale daoSaleProductSale;
@@ -163,5 +160,12 @@ class ControlSaleMorning {
       saleProduct.amountOutput = value;
     }
     daoSaleProductSale.updateSaleProduct(saleProduct);
+  }
+  double totalMoney(){
+    var total=0.0;
+    listSaleProduct.forEach((product){
+      total+=(product.amountInput-product.amountOutput)*product.price;
+    });
+    return total;
   }
 }

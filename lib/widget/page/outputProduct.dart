@@ -11,13 +11,7 @@ class OutputProduct extends StatefulWidget {
   OutputProduct(
     this.controlSaleMorning,
     this.type,
-  ) {
-    if (type == 1) {
-      print("new OutputMorning");
-    } else {
-      print("new OutputAfternoon");
-    }
-  }
+  );
 
   @override
   State createState() {
@@ -43,7 +37,7 @@ class _OutputProductState extends State<OutputProduct> with WidgetsBindingObserv
 // close all textControler free memory
   Future closeedit()async{
     if(textControlers.length!=0) {
-      await textControlers.map((item) {
+      await textControlers.forEach((item) {
         item.dispose();
       });
     }
@@ -53,7 +47,6 @@ class _OutputProductState extends State<OutputProduct> with WidgetsBindingObserv
     super.dispose();
     await closeedit();
     WidgetsBinding.instance.removeObserver(this);
-    print("outputdispose");
   }
   @override
   Widget build(BuildContext context) {
@@ -97,14 +90,19 @@ class _OutputProductState extends State<OutputProduct> with WidgetsBindingObserv
                   (BuildContext context, AsyncSnapshot<List<SaleProduct>> snapshot) {
                 if (snapshot.hasData) {
                   List<SaleProduct> list = snapshot.data;
-                  textControlers.clear();
                   return ListView.builder(
                       itemCount: list.length,
                       itemBuilder: (context, i) {
                         var saleproduct = list.elementAt(i);
-                        if(i>=textControlers.length) {
+                        if (i >= textControlers.length) {
                           textControlers.add(new TextEditingController(
+                            text: saleproduct.amountOutput.toString(),));
+                          textControlers.elementAt(i).selection =TextSelection.collapsed(offset: saleproduct.amountOutput.toString().length);
+                        }else{
+                          textControlers.removeAt(i);
+                          textControlers.insert(i, new TextEditingController(
                               text: saleproduct.amountOutput.toString()));
+                          textControlers.elementAt(i).selection =TextSelection.collapsed(offset: saleproduct.amountOutput.toString().length);
                         }
                         //type 2 change output
                         return _rowInListView(2, saleproduct, context, i);

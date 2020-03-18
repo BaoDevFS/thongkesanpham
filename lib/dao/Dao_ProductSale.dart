@@ -7,14 +7,12 @@ class DaoSaleProductSale {
 
   Future<Database> createDatabase() async {
     if (database != null) {
-      print("return has PS");
       return database;
     }
     var databasesPath = await getDatabasesPath();
     var path = join(databasesPath, "thongke.db");
     database =
         await openDatabase(path, version: 1, onCreate: (db, version) async {});
-    print("create new database PS");
     return database;
   }
 

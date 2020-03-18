@@ -10,7 +10,7 @@ class ProcessImage{
     if(image==null) return null;
 //    ImageProperties properties = await FlutterNativeImage.getImageProperties(image.path);
     File compressedFile = await FlutterNativeImage.compressImage(image.path, quality: 80,
-        targetWidth: 270, targetHeight: 480);
+        targetWidth: 270, targetHeight: 420);
     return compressedFile;
   }
   static Future<File> pickImage()async{
@@ -20,6 +20,7 @@ class ProcessImage{
     }
     Directory path = await getApplicationDocumentsDirectory();
 // copy the file to a new path
+    print(path.path);
      File newImage = await imagetmp.copy('${path.path}/image1.png');
     return newImage;
   }
