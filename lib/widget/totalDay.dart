@@ -25,7 +25,6 @@ class _TotalDayState extends State<TotalDay> {
   @override
   void initState() {
     // TODO: implement initState
-    WidgetsBinding.instance.addPostFrameCallback((_)=>_edit.text="${widget.controlTotalDay.total}");
     super.initState();
   }
   @override
@@ -110,6 +109,7 @@ class _TotalDayState extends State<TotalDay> {
           SizedBox(
             height: 10,
           ),
+
           Text('Tổng tiền:${sl*price}',style: TextStyle(fontSize: 16,color: Colors.blue)),
         ],
       ),

@@ -34,7 +34,6 @@ class _EditListDefaultState extends State<EditListDefault> {
         ],
       ),
       body: FutureBuilder<List<Product>>(
-        initialData: widget.controlEditListDefault.listProductDefault,
         future: widget.controlEditListDefault.getListProductDefault(),
         builder: (BuildContext context, AsyncSnapshot<List<Product>> snapshot) {
           if (snapshot.hasData) {

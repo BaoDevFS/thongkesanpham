@@ -195,7 +195,7 @@ class _OutputProductState extends State<OutputProduct> with WidgetsBindingObserv
                             var cotroler = textControlers.elementAt(i);
                             cotroler.text =
                                 (int.parse(cotroler.text) - 1).toString();
-                            widget.controlSaleMorning.changeSaleProduct(saleProduct, type, int.parse(cotroler.text));
+                            widget.controlSaleMorning.changeSaleProduct(saleProduct, type,widget.type, int.parse(cotroler.text));
                           },
                           shape: RoundedRectangleBorder(
                             borderRadius: new BorderRadius.circular(10.0),
@@ -218,9 +218,9 @@ class _OutputProductState extends State<OutputProduct> with WidgetsBindingObserv
                           cursorColor: Colors.red,
                           onSubmitted: (string) {
                             try {
-                              widget.controlSaleMorning.changeSaleProduct(saleProduct, type, int.parse(string));
+                              widget.controlSaleMorning.changeSaleProduct(saleProduct, type,widget.type, int.parse(string));
                             } catch (err) {
-                              widget.controlSaleMorning.changeSaleProduct(saleProduct, type,0);
+                              widget.controlSaleMorning.changeSaleProduct(saleProduct, type,widget.type,0);
                               textControlers.elementAt(i).text = "0";
                             }
                           },
@@ -241,7 +241,7 @@ class _OutputProductState extends State<OutputProduct> with WidgetsBindingObserv
                             try {
                               cotroler.text =
                                   (int.parse(cotroler.text) + 1).toString();
-                              widget.controlSaleMorning.changeSaleProduct(saleProduct, type, int.parse(cotroler.text));
+                              widget.controlSaleMorning.changeSaleProduct(saleProduct, type,widget.type, int.parse(cotroler.text));
                             } on FormatException {
                               cotroler.text = cotroler.text;
                             }
@@ -294,7 +294,8 @@ class _OutputProductState extends State<OutputProduct> with WidgetsBindingObserv
                 ),
               ],
               title: Text("Bạn muốn xóa sản phẩm này?"),
-            ));
+            )
+    );
   }
 
 }

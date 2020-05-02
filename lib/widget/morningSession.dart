@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,8 +15,10 @@ import 'package:thongkehanghoa/widget/page/totalProduct.dart';
 import 'package:thongkehanghoa/widget/totalDay.dart';
 
 import 'detailEditSaleProduct.dart';
+
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key}) : super(key: key);
+
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -22,16 +26,19 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   ControlSaleMorning controlSaleMorning;
   var bol;
+
   @override
   void initState() {
     controlSaleMorning = new ControlSaleMorning();
+    controlSaleMorning.setCurrentPage(1);
     getStatusWork();
   }
+
   Future<bool> getStatusWork() async {
     final sharePreferent = await SharedPreferences.getInstance();
-    final tmp= sharePreferent.getBool("WORK") ?? false;
+    final tmp = sharePreferent.getBool("WORK") ?? false;
     setState(() {
-      bol=tmp;
+      bol = tmp;
     });
   }
 
@@ -39,15 +46,16 @@ class _MyHomePageState extends State<MyHomePage> {
     final sharePreferent = await SharedPreferences.getInstance();
     sharePreferent.remove("WORK");
   }
+
   @override
   Widget build(BuildContext context) {
-    if(bol==null){
-      return Center(child: CircularProgressIndicator(),);
-    }else if(bol==false){
+    if (bol == null) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    } else if (bol == false) {
       return Scaffold(
-        appBar: AppBar(
-
-        ),
+        appBar: AppBar(),
         drawer: Drawer(
           child: ListView(
             children: <Widget>[
@@ -66,10 +74,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 onTap: () {
                   Navigator.of(context).pop();
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (context) =>
-                        EditListDefault(new ControlEditListDefault()),
-                  ));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            EditListDefault(new ControlEditListDefault()),
+                      ));
                 },
               ),
               ListTile(
@@ -87,9 +97,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 onTap: () {
                   Navigator.of(context).pop();
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => CountMoney(),
-                  ));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CountMoney(),
+                      ));
                 },
               ),
             ],
@@ -98,9 +110,9 @@ class _MyHomePageState extends State<MyHomePage> {
         body: Center(
           child: RaisedButton(
             child: Text("Tạo phiên mới"),
-            onPressed: ()async{
-              final wait =await controlSaleMorning.createNewSessionWork();
-              if(wait) {
+            onPressed: () async {
+              final wait = await controlSaleMorning.createNewSessionWork();
+              if (wait) {
                 setState(() {
                   bol = true;
                 });
@@ -109,20 +121,24 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       );
-    }else {
+    } else {
       return DefaultTabController(
           length: 3,
-          child:
-          Scaffold(
+          child: Scaffold(
             appBar: AppBar(
               title: Text("Ca sáng"),
               actions: <Widget>[
-                IconButton(icon: Icon(Icons.add_box),
-                onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (context)=>EditSaleProduct(controlSaleMorning.daoSaleProductSale,1),
-                  ));
-                },)
+                IconButton(
+                  icon: Icon(Icons.add_box),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EditSaleProduct(
+                              controlSaleMorning.daoSaleProductSale, 1),
+                        ));
+                  },
+                )
               ],
               bottom: TabBar(
                 tabs: <Widget>[
@@ -140,9 +156,17 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             body: TabBarView(
               children: <Widget>[
-                InputProduct(controlSaleMorning, 1,),
-                OutputProduct(controlSaleMorning, 1,),
-                TotalProduct(controlSaleMorning,),
+                InputProduct(
+                  controlSaleMorning,
+                  1,
+                ),
+                OutputProduct(
+                  controlSaleMorning,
+                  1,
+                ),
+                TotalProduct(
+                  controlSaleMorning,
+                ),
               ],
             ),
             drawer: Drawer(
@@ -179,10 +203,15 @@ class _MyHomePageState extends State<MyHomePage> {
                       ],
                     ),
                     onTap: () {
+                      controlSaleMorning.saveDataTonKho();
                       Navigator.of(context).pop();
-                      Navigator.push(context, MaterialPageRoute(
-                        builder: (context) => AfternoonSession(),
-                      ));
+                      Timer(Duration(milliseconds: 500), () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AfternoonSession(),
+                            ));
+                      });
                     },
                   ),
                   ListTile(
@@ -200,9 +229,13 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     onTap: () {
                       Navigator.of(context).pop();
-                      Navigator.push(context, MaterialPageRoute(
-                        builder: (context)=>TotalDay(controlTotalDay: new ControlTotalDay(), ),
-                      ));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => TotalDay(
+                              controlTotalDay: new ControlTotalDay(),
+                            ),
+                          ));
                     },
                   ),
                   ListTile(
@@ -220,10 +253,12 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     onTap: () {
                       Navigator.of(context).pop();
-                      Navigator.push(context, MaterialPageRoute(
-                        builder: (context) =>
-                            EditListDefault(new ControlEditListDefault()),
-                      ));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                EditListDefault(new ControlEditListDefault()),
+                          ));
                     },
                   ),
                   ListTile(
@@ -241,9 +276,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     onTap: () {
                       Navigator.of(context).pop();
-                      Navigator.push(context, MaterialPageRoute(
-                        builder: (context) => CountMoney(),
-                      ));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CountMoney(),
+                          ));
                     },
                   ),
                   ListTile(
@@ -256,15 +293,11 @@ class _MyHomePageState extends State<MyHomePage> {
                         SizedBox(
                           width: 30,
                         ),
-                        Text('Đóng phiên')
+                        Text('Đóng phiên và xuất file')
                       ],
                     ),
                     onTap: () {
-                      controlSaleMorning.daoSaleProductSale.deleteAllSaleProduct();
-                      Navigator.of(context).pop();
-                      setState(() {
-                        bol=false;
-                      });
+                      closeSesion();
                     },
                   ),
                 ],
@@ -273,5 +306,40 @@ class _MyHomePageState extends State<MyHomePage> {
           ));
     }
   }
+  closeSesion()async{
+    await controlSaleMorning.saveDataTonKho();
+    showAlert("");
+    final bl =await controlSaleMorning.saveFile();
+    if(bl==true) {
+      await controlSaleMorning.daoSaleProductSale
+          .deleteAllSaleProduct();
+      deleteStatusWork();
+    }
+    Navigator.of(context).pop();
+    setState(() {
+      bol = false;
+    });
 
+  }
+  showAlert(String content) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return AlertDialog(backgroundColor: Colors.black12,
+            content:  Container(
+              width: 250,
+              height: 100,
+              child: Center(
+                child: RefreshProgressIndicator(),
+              ),
+            ),
+          );
+        });
+  }
+  @override
+  void dispose() {
+    controlSaleMorning.saveDataTonKho();
+    super.dispose();
+  }
 }

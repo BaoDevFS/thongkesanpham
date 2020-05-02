@@ -8,13 +8,22 @@ class BlocSaleProduct{
   Stream<List<SaleProduct>> get locationStream => _controler.stream;
   ControlSaleMorning controlSaleMorning;
   int type;
+  List<SaleProduct> totalList;
   BlocSaleProduct(this.controlSaleMorning,this.type){
    getList();
   }
   getList()async{
     // type = 0 is get all element from listSale for page TotalProduct
     if(type==0){
-      _controler.sink.add(controlSaleMorning.listSaleProduct);
+      totalList =List.from(controlSaleMorning.listSaleProduct);
+      totalList.sort((a,b){
+        if((a.amountInput-a.amountOutput)>=(b.amountInput-b.amountOutput)){
+          return -1;
+        }else{
+          return 1;
+        }
+      });
+      _controler.sink.add(totalList);
       return;
     }
     final list =await controlSaleMorning.getListSaleProduct(type);
@@ -23,7 +32,7 @@ class BlocSaleProduct{
   searchlist(String value)async{
     List<SaleProduct> resultsearch = new List();
     if(value==null||value=="") {
-      _controler.sink.add(controlSaleMorning.listSaleProduct);
+     getList();
       return;
     }
       controlSaleMorning.listSaleProduct.forEach((saleproduct){
@@ -36,5 +45,8 @@ class BlocSaleProduct{
   }
   dispose(){
     _controler.close();
+    if(totalList!=null) {
+      totalList.clear();
+    }
   }
 }

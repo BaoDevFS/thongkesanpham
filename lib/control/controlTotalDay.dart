@@ -13,12 +13,20 @@ class ControlTotalDay{
   }
   Future<Map<String,int>> getList()async{
     var lists= await daoSaleProductSale.getListAllSaleProduct();
-    lists.forEach((product){
-      if(!list.containsKey(product.name)){
-        list.putIfAbsent(product.name, ()=>(product.amountInput-product.amountOutput));
+    var lastbarcode = "";
+     lists.forEach((product){
+       if(product.barcode!="") {
+          lastbarcode = " ("+product.barcode.substring(
+             product.barcode.length - 5)+")";
+       }else{
+         lastbarcode="";
+       }
+      if(!list.containsKey(product.name+lastbarcode)){
+        // show last 5 char barcode
+        list.putIfAbsent(product.name+lastbarcode, ()=>(product.amountInput-product.amountOutput));
         listPrice.add(product.price);
       }else{
-        list.update(product.name, (value)=>value+(product.amountInput-product.amountOutput));
+        list.update(product.name+lastbarcode, (value)=>value+(product.amountInput-product.amountOutput));
       }
       total+=(product.price*(product.amountInput-product.amountOutput));
     });

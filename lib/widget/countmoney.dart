@@ -34,34 +34,36 @@ class CountMoneyState extends State<CountMoney> {
       listEdit.add(new TextEditingController());
     }
   }
-
+  int validateValue(String value){
+    try{
+      return int.parse(value);
+    } on FormatException{
+      return 0;
+    }
+  }
+  
   sumaryMoney() {
     var tmp = 0;
-    tmp += ((int.parse(listEdit.elementAt(0).text == ""
-                ? "0"
-                : listEdit.elementAt(0).text) *
+    tmp += (
+        (validateValue(listEdit.elementAt(0).text ) *
             500000) +
-        (int.parse(listEdit.elementAt(1).text == "" ? "0" : listEdit.elementAt(1).text) *
+        (validateValue(listEdit.elementAt(1).text ) *
             200000) +
-        (int.parse(listEdit.elementAt(2).text == "" ? "0" : listEdit.elementAt(2).text) *
+        (validateValue(listEdit.elementAt(2).text) *
             100000) +
-        (int.parse(listEdit.elementAt(3).text == "" ? "0" : listEdit.elementAt(3).text) *
+        (validateValue(listEdit.elementAt(3).text ) *
             50000) +
-        (int.parse(listEdit.elementAt(4).text == "" ? "0" : listEdit.elementAt(4).text) *
+        (validateValue(listEdit.elementAt(4).text ) *
             20000) +
-        (int.parse(listEdit.elementAt(5).text == "" ? "0" : listEdit.elementAt(5).text) *
+        (validateValue(listEdit.elementAt(5).text ) *
             10000) +
-        (int.parse(listEdit.elementAt(6).text == "" ? "0" : listEdit.elementAt(6).text) *
+        (validateValue(listEdit.elementAt(6).text ) *
             5000) +
-        (int.parse(listEdit.elementAt(7).text == "" ? "0" : listEdit.elementAt(7).text) *
+        (validateValue(listEdit.elementAt(7).text ) *
             2000) +
-        (int.parse(listEdit.elementAt(8).text == ""
-                ? "0"
-                : listEdit.elementAt(8).text) *
+        (validateValue(listEdit.elementAt(8).text ) *
             1000) +
-        (int.parse(listEdit.elementAt(9).text == ""
-                ? "0"
-                : listEdit.elementAt(9).text) *
+        (validateValue(listEdit.elementAt(9).text ) *
             500));
     FlutterMoneyFormatter fb =
         new FlutterMoneyFormatter(amount: double.parse(tmp.toString()));

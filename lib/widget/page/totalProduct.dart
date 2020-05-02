@@ -25,7 +25,7 @@ class _TotalProductState extends State<TotalProduct>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    bloc =new BlocSaleProduct(widget.controlSaleMorning, 0);
+    bloc = new BlocSaleProduct(widget.controlSaleMorning, 0);
 //    formatter = new FlutterMoneyFormatter();
   }
 
@@ -58,7 +58,8 @@ class _TotalProductState extends State<TotalProduct>
                       decoration: InputDecoration(
                         prefixIcon: Icon(Icons.search),
                         contentPadding: EdgeInsets.all(10),
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20)),
                       ),
                       onChanged: (value) {
                         bloc.searchlist(value);
@@ -90,13 +91,18 @@ class _TotalProductState extends State<TotalProduct>
                   },
                 ),
               ),
-
             ],
           ),
           Positioned(
             top: 10,
             right: 2,
-            child: Text("Tổng :${FlutterMoneyFormatter(amount:  widget.controlSaleMorning.totalMoney()).output.withoutFractionDigits}",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.blue),),
+            child: Text(
+              "Tổng :${FlutterMoneyFormatter(amount: widget.controlSaleMorning.totalMoney()).output.withoutFractionDigits}",
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue),
+            ),
           )
         ],
       ),
@@ -115,7 +121,7 @@ class _TotalProductState extends State<TotalProduct>
         child: Column(
           children: <Widget>[
             Text(
-              "${saleProduct.name}",
+              "${saleProduct.name}(${saleProduct.barcode.substring(saleProduct.barcode.length-6)})",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               maxLines: 1,
             ),
@@ -153,7 +159,7 @@ class _TotalProductState extends State<TotalProduct>
                       height: 3,
                     ),
                     Text(
-                      "Tổng tiền: ${(saleProduct.amountInput-saleProduct.amountOutput)*saleProduct.price }",
+                      "Tổng tiền: ${(saleProduct.amountInput - saleProduct.amountOutput) * saleProduct.price}",
                       style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,

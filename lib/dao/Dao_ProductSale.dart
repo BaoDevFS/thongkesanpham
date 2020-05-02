@@ -61,6 +61,7 @@ class DaoSaleProductSale {
           amountOutput: maps[i]['amountOutput']);
     });
   }
+  //get all SaleProduct
   Future<List<SaleProduct>> getListAllSaleProduct() async {
     Database db = await createDatabase();
     List<Map> maps = await db.query('saleproduct');
@@ -76,7 +77,8 @@ class DaoSaleProductSale {
           amountOutput: maps[i]['amountOutput']);
     });
   }
-  Future<SaleProduct> getSaleProductByBarcode(String barcode)async{
+
+  Future<SaleProduct> getSaleProductByBarcode(String barcode,int type)async{
     Database db = await createDatabase();
     List<Map> maps = await db.query('saleproduct',
         columns: [
@@ -89,17 +91,55 @@ class DaoSaleProductSale {
           'amountInput',
           'amountOutput'
         ],
-        where: 'barcode = ?',
-        whereArgs: [barcode]);
+        where: 'barcode = ? and type = ?',
+        whereArgs: [barcode,type]);
     if (maps.length > 0) {
       return SaleProduct.fromMap(maps.first);
     }
     return null;
   }
+  Future<SaleProduct> getSaleProductByName(String name,int type)async{
+    Database db = await createDatabase();
+    List<Map> maps = await db.query('saleproduct',
+        columns: [
+          'id',
+          'name',
+          'type',
+          'price',
+          'image',
+          'barcode',
+          'amountInput',
+          'amountOutput'
+        ],
+        where: 'name = ? and type = ?',
+        whereArgs: [name,type]);
+    if (maps.length > 0) {
+      return SaleProduct.fromMap(maps.first);
+    }
+    return null;
+  }
+
   Future updateSaleProduct(SaleProduct saleProduct) async {
     Database db = await createDatabase();
     await db.update('saleproduct', saleProduct.toMap(),
         where: 'id = ?', whereArgs: [saleProduct.id]);
+  }
+
+  Future updateSaleProductByTypeAndBarcode(SaleProduct saleProduct, type) async {
+    //type is morning or affternoon
+    var tmpsaleProduct;
+    if(saleProduct.barcode==null){
+      tmpsaleProduct =await getSaleProductByName(saleProduct.name, type);
+    }else{
+       tmpsaleProduct =await getSaleProductByBarcode(saleProduct.barcode, type);
+    }
+    if(tmpsaleProduct==null){
+      return;
+    }
+    tmpsaleProduct.amountInput=saleProduct.amountOutput;
+    await database.update('saleproduct', tmpsaleProduct.toMap(),
+        where: 'id = ?', whereArgs: [tmpsaleProduct.id]);
+    return;
   }
 
   Future deleteSaleProduct(int id) async {

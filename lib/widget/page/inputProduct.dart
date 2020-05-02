@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:qrscan/qrscan.dart';
@@ -33,6 +32,7 @@ class _InputProductState extends State<InputProduct>
     // rebuild when
     setState(() {});
   }
+
   // close all control edittext free memory
   Future closeedit() async {
     if (textControlers.length != 0) {
@@ -52,18 +52,22 @@ class _InputProductState extends State<InputProduct>
 
   @override
   void initState() {
-    super.initState();
     WidgetsBinding.instance.addObserver(this);
-    bloc =new BlocSaleProduct(widget.controlSaleMorning,widget.type);
+    bloc = new BlocSaleProduct(widget.controlSaleMorning, widget.type);
   }
+
   showDialogEdit() async {
     final barcode = await scan();
     if (barcode == null) {
       return;
     } else {
       var productSale = await widget.controlSaleMorning.daoSaleProductSale
-          .getSaleProductByBarcode(barcode);
-      textdialogControl = new TextEditingController(text: productSale.amountInput.toString());
+          .getSaleProductByBarcode(barcode,widget.type);
+      if (productSale == null) {
+        return;
+      }
+      textdialogControl =
+          new TextEditingController(text: productSale.amountInput.toString());
       return showDialog(
           context: context,
           builder: (context) {
@@ -75,19 +79,19 @@ class _InputProductState extends State<InputProduct>
                 decoration: InputDecoration(
                   labelText: "Số lượng",
                   border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10)
-                  ),
+                      borderRadius: BorderRadius.circular(10)),
                 ),
               ),
               actions: <Widget>[
                 FlatButton(
                   child: Text("Save"),
-                 onPressed: (){
-                    productSale.amountInput=int.parse(textdialogControl.text);
-                    widget.controlSaleMorning.daoSaleProductSale.updateSaleProduct(productSale);
+                  onPressed: () {
+                    productSale.amountInput = int.parse(textdialogControl.text);
+                    widget.controlSaleMorning.daoSaleProductSale
+                        .updateSaleProduct(productSale);
                     Navigator.of(context).pop();
                     textdialogControl.dispose();
-                 },
+                  },
                 )
               ],
             );
@@ -97,7 +101,7 @@ class _InputProductState extends State<InputProduct>
 
   @override
   Widget build(BuildContext context) {
-    return  Container(
+    return Container(
       child: Column(
         children: <Widget>[
           Row(
@@ -130,7 +134,6 @@ class _InputProductState extends State<InputProduct>
           ),
           Expanded(
             child: StreamBuilder<List<SaleProduct>>(
-              initialData: widget.controlSaleMorning.listSaleProduct,
               //type =1 is listMorning
               stream: bloc.locationStream,
               builder: (BuildContext context,
@@ -143,13 +146,24 @@ class _InputProductState extends State<InputProduct>
                         var saleproduct = list.elementAt(i);
                         if (i >= textControlers.length) {
                           textControlers.add(new TextEditingController(
-                              text: saleproduct.amountInput.toString(),));
-                          textControlers.elementAt(i).selection =TextSelection.collapsed(offset: saleproduct.amountInput.toString().length);
-                        }else{
+                            text: saleproduct.amountInput.toString(),
+                          ));
+                          textControlers.elementAt(i).selection =
+                              TextSelection.collapsed(
+                                  offset: saleproduct.amountInput
+                                      .toString()
+                                      .length);
+                        } else {
                           textControlers.removeAt(i);
-                          textControlers.insert(i, new TextEditingController(
-                              text: saleproduct.amountInput.toString()));
-                          textControlers.elementAt(i).selection =TextSelection.collapsed(offset: saleproduct.amountInput.toString().length);
+                          textControlers.insert(
+                              i,
+                              new TextEditingController(
+                                  text: saleproduct.amountInput.toString()));
+                          textControlers.elementAt(i).selection =
+                              TextSelection.collapsed(
+                                  offset: saleproduct.amountInput
+                                      .toString()
+                                      .length);
                         }
                         // type 1  chage input
                         return _rowInListView(1, saleproduct, context, i);
@@ -271,7 +285,8 @@ class _InputProductState extends State<InputProduct>
                                 (int.parse(cotroler.text) - 1).toString();
 //                            widget.controlSaleMorning.changeSaleProductFromList(
 //                                type, i, int.parse(cotroler.text));
-                          widget.controlSaleMorning.changeSaleProduct(saleProduct, type, int.parse(cotroler.text));
+                            widget.controlSaleMorning.changeSaleProduct(
+                                saleProduct, type,widget.type, int.parse(cotroler.text));
                           },
                           shape: RoundedRectangleBorder(
                             borderRadius: new BorderRadius.circular(10.0),
@@ -295,12 +310,11 @@ class _InputProductState extends State<InputProduct>
                           cursorColor: Colors.red,
                           onSubmitted: (string) {
                             try {
-//                              widget.controlSaleMorning
-//                                  .changeSaleProductFromList(
-//                                      type, i, int.parse(string));
-                              widget.controlSaleMorning.changeSaleProduct(saleProduct, type, int.parse(string));
+                              widget.controlSaleMorning.changeSaleProduct(
+                                  saleProduct, type,widget.type, int.parse(string));
                             } catch (err) {
-                              widget.controlSaleMorning.changeSaleProduct(saleProduct, type,0);
+                              widget.controlSaleMorning
+                                  .changeSaleProduct(saleProduct, type,widget.type, 0);
                               textControlers.elementAt(i).text = "0";
                             }
                           },
@@ -324,7 +338,8 @@ class _InputProductState extends State<InputProduct>
 //                              widget.controlSaleMorning
 //                                  .changeSaleProductFromList(
 //                                      type, i, int.parse(cotroler.text));
-                              widget.controlSaleMorning.changeSaleProduct(saleProduct, type, int.parse(cotroler.text));
+                              widget.controlSaleMorning.changeSaleProduct(
+                                  saleProduct, type,widget.type, int.parse(cotroler.text));
                             } on FormatException {
                               cotroler.text = cotroler.text;
                             }
@@ -353,5 +368,4 @@ class _InputProductState extends State<InputProduct>
       },
     );
   }
-
 }
